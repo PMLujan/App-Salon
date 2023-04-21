@@ -1,0 +1,19 @@
+{
+    "name": "pc/app-salon_php_mvc_js_sass",
+    "description": "AppSalon",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "MVC\\": "./",
+            "Controllers\\" : "./controllers",
+            "Model\\" : "./models"
+        }
+    },
+    "authors": [
+        {
+            "name": "PMLujan",
+            "email": "lujan_paredes@hotmail.com.ar"
+        }
+    ],
+    "require": {}
+}
