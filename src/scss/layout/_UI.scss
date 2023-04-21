@@ -2,5 +2,23 @@
 @use 'base/mixins' as m;
 
 .contenidoApp{
-    
+    @include m.tablet{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        min-height: 100vh;
+    }
+    .imagen{
+        height: 20rem;
+        background-image: url(../img/salon-de-belleza.jpeg);
+        background-size: cover;
+        background-position: center center;
+        @include m.tablet{
+            height: auto;
+        }
+    }
+    .app{
+        width: 95%;
+        margin: 0 auto;
+        padding: 3rem 1rem;
+    }
 }

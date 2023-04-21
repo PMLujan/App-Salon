@@ -1,0 +1,26 @@
+@use '../base/mixins' as m;
+@use '../base/variables' as v;
+
+.formulario{
+    width: 100%;
+}
+.campo{
+    @include m.tablet{
+        display: flex;
+        margin-bottom: 2rem;
+        align-items: center;
+    }
+
+    label{
+        flex: 0 0 10rem;
+        }
+    input{
+        flex: 1 ;
+        border: none;
+        padding: 1rem;
+        border-radius: 1rem;
+        width: 100%;
+        margin: 1rem 0;
+    }
+
+}

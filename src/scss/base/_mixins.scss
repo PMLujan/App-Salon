@@ -37,6 +37,7 @@
 
     @include tablet {
         width: auto;
+        margin: 5rem auto;
     }
     &:hover {
         background-color: darken( $bgColor, 10% );
