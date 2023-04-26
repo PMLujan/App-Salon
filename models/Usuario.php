@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 use Model\ActiveRecord;
 
 class Usuario extends ActiveRecord {
@@ -28,6 +30,20 @@ class Usuario extends ActiveRecord {
         $this->admin = $args['admin'] ?? null;
         $this->confirmado = $args['confirmado'] ?? null;
         $this->token = $args['token'] ?? '';        
+    }
+     
+    //mensaje de validacion para la creacion de cuenta
+
+    public function validarCuentaNueva(){
+
+        if(!$this->nombre){
+            self::$alertas['error'][] = "El Nombre del cliente es obligatorio";
+        }
+        if(!$this->apellido){
+            self::$alertas['error'][] = "El Apellido del cliente es obligatorio";
+        }
+
+        return self::$alertas;
     }
 }
 ?>
