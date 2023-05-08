@@ -10,7 +10,53 @@ use Model\Usuario;
 class LoginControllers {
 
     public static function login(Router $router){
-        $router->render('auth/login');
+        $alertas = [];
+
+        $auth= new Usuario; //es para que mantenga el corro en el caso de recargar pag
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+            $auth = new Usuario($_POST);
+
+            $alertas = $auth->validarUsuario();
+
+            if(empty($alertas)){
+                //comprobar que existe usuario
+                $usuario =Usuario::where('email',$auth->email);
+                
+                if($usuario){
+                    //verificar password
+                     if($usuario->comprobarPasswordVerificado($auth->password)){
+                        //autenticar al usuario
+                        session_start();//para habilitar la superglobal session
+
+                        $_SESSION['id'] = $usuario->id;
+                        $_SESSION['nombre'] = $usuario->nombre;
+                        $_SESSION['email'] = $usuario->email;
+                        $_SESSION['login'] = true;
+
+                        //redireccionamos
+                        if($usuario->admin === '1'){
+                            $_SESSION['admin'] = $usuario->admin ?? null;
+
+                            header('location: /admin');
+                        }else{
+                            header('location: /cita');
+                        }
+
+                     };
+                }else{
+                    Usuario::setAlerta('error','El Usuario no existe');
+                }
+            }
+        }
+
+        $alertas = Usuario::getAlertas();
+        
+        $router->render('auth/login',[
+            'alertas'=> $alertas,
+            'auth'=> $auth
+        ]);
     }
 
     public static function logout(){
@@ -18,7 +64,21 @@ class LoginControllers {
     }
 
     public static function olvide( Router $router){
+        $alertas =[];
+     
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+            $auth= new Usuario($_POST);
+            $alertas = $auth->validarEmail();
+
+            if(empty($alertas)){
+                
+            }
+
+        }
+        
         $router->render('auth/olvide-password',[
+            'alertas' => $alertas
 
         ]);
         
