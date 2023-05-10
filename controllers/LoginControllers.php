@@ -12,7 +12,7 @@ class LoginControllers {
     public static function login(Router $router){
         $alertas = [];
 
-        $auth= new Usuario; //es para que mantenga el corro en el caso de recargar pag
+        $auth= new Usuario; //es para que mantenga la informacion  en el caso de recargar pag
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -22,7 +22,7 @@ class LoginControllers {
 
             if(empty($alertas)){
                 //comprobar que existe usuario
-                $usuario =Usuario::where('email',$auth->email);
+                $usuario = Usuario::where('email',$auth->email);
                 
                 if($usuario){
                     //verificar password
@@ -72,19 +72,80 @@ class LoginControllers {
             $alertas = $auth->validarEmail();
 
             if(empty($alertas)){
-                
-            }
+                $usuario = Usuario::where('email', $auth->email);
 
+                if($usuario && $usuario->confirmado === '1'){
+                    //genero nuevo token
+                    $usuario->crearToken();
+                    $usuario->guardar();
+
+                    //enviar mail
+                    $email = new  Emails($usuario->email, $usuario->nombre , $usuario->token);
+                    $email->enviarInstrucciones();
+
+                    //print alerta
+                    Usuario::setAlerta('exito' , 'Revisa tu E-mail');
+
+                }else{
+                    Usuario::setAlerta('error','El Usuario no existe o no esta confirmado');
+                }
+            }
         }
-        
+
+        $alertas = Usuario::getAlertas();
+
         $router->render('auth/olvide-password',[
             'alertas' => $alertas
 
         ]);
         
     }
-    public static function recuperar(){
-        echo 'Desde Recuperar';
+    public static function recuperar( Router $router){
+
+        $alertas =[];
+        $error= false;//si el token no es valido no traiga el formulario para recuperar
+
+        $token= S($_GET['token']);
+
+        //buscar usuario por su token
+        $usuario = Usuario::where('token', $token);
+
+        if(empty($usuario)){
+                Usuario::setAlerta('error', 'El token no es valido');
+                $error= true;
+        }
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            //leer la nueva password y guardarla
+
+            $password = new Usuario($_POST);
+
+            $alertas = $password->validarPassword();
+            if(empty($alertas)){
+                //modificamos a null el password actual
+                $usuario->password = null;
+
+                //le asignamos el nuevo valor del objeto password creado al arriba- al del usuario creado en la base de datos
+                $usuario->password = $password->password;
+                //hashear el nuevo password
+                $usuario->hashPassword();
+                //reseteamos el token
+                $usuario->token=null;
+
+                //guardamos nuevo password en la bd
+                $resultado = $usuario->guardar();
+
+                if($resultado){
+                    header('location: /');
+                }
+            }
+        }
+
+        $alertas = Usuario::getAlertas();
+        $router->render('auth/recuperar-password',[
+            'alertas'=>$alertas,
+            'error'=> $error
+        ]);
     }
     
     public static function crear( Router $router){
