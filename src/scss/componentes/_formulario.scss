@@ -22,6 +22,12 @@
         border-radius: 1rem;
         width: 100%;
         margin: 1rem 0;
+        
+        &:disabled{
+            background-color: darken(v.$pinkFondo, 20%);
+            color: v.$blanco;
+            cursor: not-allowed;
+        }
     }
 
 }

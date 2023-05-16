@@ -17,3 +17,7 @@
             
 </body>
 </html>
+
+<?php
+    echo $script ?? ''; // le colocamos las comillas para que no nos arroje error si no esta definido
+?>
