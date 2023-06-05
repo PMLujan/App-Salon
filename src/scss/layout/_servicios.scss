@@ -1,0 +1,30 @@
+@use '../base/mixins' as m;
+@use '../base/variables' as v;
+
+.listadoServicios{
+    display: grid;
+    gap: 2rem;
+
+    @include m.tablet{
+        @include m.grid(2, 1.5rem);
+    }
+
+    .servicio{
+        width: 100%;
+        background-color:lighten(v.$magenta, 20%);
+        border-radius: 1rem;
+        transition-property: transform;
+        transition-duration: 300ms;
+        &.seleccionado{
+            background-color:lighten(v.$grisoscuro, 15%);
+        }
+
+        &:hover{
+            transform: scale(1.1);
+        }
+        .precioServicio{
+            font-weight: bold;
+            color: darken( v.$grisoscuro, 15%);
+        }
+    }
+}
