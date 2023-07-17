@@ -1,0 +1,27 @@
+@use '../base/variables' as v;
+@use '../base/mixins' as m;
+
+.contenido-resumen{
+    p{
+        color: v.$magenta;
+        span{
+            color: lighten(v.$grisoscuro, 15%);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+    
+    }
+}
+
+.contenedorServicio{
+    border-bottom: 1px solid v.$magenta;
+    margin-top: 1rem;
+    p{
+        color: v.$blanco;
+        text-align: left;
+        span{
+            color: v.$magenta;
+        }
+    }
+
+}
