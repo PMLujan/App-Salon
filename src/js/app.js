@@ -254,9 +254,16 @@ function mostrarResumen(){
             let horaCliente = document.createElement('P');
                   horaCliente.innerHTML =`<span>Hora:</span> ${hora} Hs`;
 
+            //boton para reservar cita
+            const botonReservar= document.createElement('BUTTON');
+                  botonReservar.classList.add('boton');
+                  botonReservar.textContent= 'Reservar Cita';
+                  botonReservar.onclick = reservarCita; //no la instanciamos () para que no llame aut a la funcion
+
                   resumen.appendChild(nombreCliente);
                   resumen.appendChild(fechaCliente);
                   resumen.appendChild(horaCliente);
+                  resumen.appendChild(botonReservar);
 
                   //iterar en servicios para obtener los datos
                   servicios.forEach( servicio => {
@@ -276,3 +283,6 @@ function mostrarResumen(){
                   })
             }  
             
+      function reservarCita(){
+            console.log('reservado..');
+      }
