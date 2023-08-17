@@ -283,6 +283,27 @@ function mostrarResumen(){
                   })
             }  
             
-      function reservarCita(){
-            console.log('reservado..');
+      async function reservarCita(){
+            const {nombre,fecha,hora, servicios}=cita;
+            const idServicios= servicios.map(servicio => servicio.id);
+
+            const datos = new FormData();// se utiliza para enviar un formulario por medio de fetch al servidor
+            datos.append('nombre', nombre);
+            datos.append('fecha', fecha);
+            datos.append('hora', hora);
+            datos.append('servicios', idServicios);
+
+            //peticion a la api
+             const url= 'http://localhost:3000/api/cita';
+
+             const respuesta= await fetch(url,{
+                   method: 'POST',
+                   body: datos
+             });
+
+             const resultado = await respuesta.json();
+
+             console.log(resultado);
+
+            // console.log([...datos]); //forma de chequear los datos que se estan enviando al servidor en consola
       }
